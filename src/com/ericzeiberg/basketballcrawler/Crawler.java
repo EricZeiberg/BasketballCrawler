@@ -32,10 +32,15 @@ public class Crawler {
                 }
                 Element aTag = e.getElementsByTag("td").first().getElementsByTag("font").first().getElementsByTag("a").first();
                 Team t = new Team(aTag.text());
-                //System.out.println("Adding new team " + t.getName());
+                System.out.println("Adding new team " + t.getName());
                 teams.add(t);
                 parseTeamPage(t, aTag.attr("href"));
                 i++;
+            }
+
+            System.out.println();
+            for (Team t1 : teams){
+                System.out.println(t1);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,6 +86,9 @@ public class Crawler {
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         }
+                        else{
+                            continue;
+                        }
                         t.setWins(t.getWins() + 1);
                         newTeam.setLosses(newTeam.getLosses() + 1);
                     }
@@ -89,6 +97,8 @@ public class Crawler {
                         g = new Game(t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
+                        } else{
+                            continue;
                         }
                         t.setLosses(t.getLosses() + 1);
                         newTeam.setWins(newTeam.getWins() + 1);
@@ -100,6 +110,8 @@ public class Crawler {
                         g = new Game(newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
+                        } else{
+                            continue;
                         }
                         t.setWins(t.getWins() + 1);
                         newTeam.setLosses(newTeam.getLosses() + 1);
@@ -109,14 +121,17 @@ public class Crawler {
                         g = new Game(newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
+                        } else{
+                            continue;
                         }
                         t.setLosses(t.getLosses() + 1);
                         newTeam.setWins(newTeam.getWins() + 1);
                     }
                 }
-                //System.out.println(g);
+                System.out.println(g);
                 System.out.println(newTeam);
                 if (MiscUtils.searchTeams(newTeam, teams) != null){
+                    System.out.println("Replacing team: " + newTeam.getName());
                     MiscUtils.replaceTeam(newTeam, teams);
                 }
 
@@ -129,10 +144,7 @@ public class Crawler {
             e.printStackTrace();
         }
 
-        System.out.println();
-        for (Team t1 : teams){
-            System.out.println(t1);
-        }
+
 
     }
 
