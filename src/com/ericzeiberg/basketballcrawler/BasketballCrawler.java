@@ -15,7 +15,7 @@ public class BasketballCrawler {
 //        final Datastore datastore = morphia.createDatastore(new MongoClient(), "BasketballCrawler");
 //        datastore.ensureIndexes();
 
-        Crawler.parseDivisionPage(Division.LL);
+        Crawler.parseDivisionPage(Division.L);
 
     }
 

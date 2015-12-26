@@ -129,9 +129,7 @@ public class Crawler {
                     }
                 }
                 System.out.println(g);
-                System.out.println(newTeam);
                 if (MiscUtils.searchTeams(newTeam, teams) != null){
-                    System.out.println("Replacing team: " + newTeam.getName());
                     MiscUtils.replaceTeam(newTeam, teams);
                 }
 
