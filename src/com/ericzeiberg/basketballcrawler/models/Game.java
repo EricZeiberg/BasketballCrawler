@@ -65,5 +65,25 @@ public class Game {
         return homeTeamWon;
     }
 
+    public boolean isSameGame(Game g){
+        if (g.getLocation().equalsIgnoreCase(location) && g.getDate().equalsIgnoreCase(date)){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "homeTeam=" + homeTeam +
+                ", awayTeam=" + awayTeam +
+                ", location='" + location + '\'' +
+                ", date='" + date + '\'' +
+                ", winPts=" + winPts +
+                ", lossPts=" + lossPts +
+                ", homeTeamWon=" + homeTeamWon +
+                '}';
+    }
 }
