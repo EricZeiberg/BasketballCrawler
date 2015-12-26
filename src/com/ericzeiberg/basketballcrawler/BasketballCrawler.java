@@ -6,6 +6,7 @@ import org.mongodb.morphia.Morphia;
 
 public class BasketballCrawler {
 
+
     public static void main(String[] args){
         final Morphia morphia = new Morphia();
         morphia.mapPackage("com.ericzeiberg.basketballcrawler.models"); // Points Morphia to the models directory
@@ -14,6 +15,8 @@ public class BasketballCrawler {
         final Datastore datastore = morphia.createDatastore(new MongoClient(), "BasketballCrawler");
         datastore.ensureIndexes();
     }
+
+
 
 
 }

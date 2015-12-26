@@ -18,17 +18,23 @@ public class Game {
     private Team awayTeam;
 
     private String location;
+    private String date;
     private int winPts;
     private int lossPts;
     private boolean homeTeamWon;
 
-    public Game(Team homeTeam, Team awayTeam, String location, int winPts, int lossPts, boolean homeTeamWon) {
+    public Game(Team homeTeam, Team awayTeam, String location, String date, int winPts, int lossPts, boolean homeTeamWon) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.location = location;
+        this.date = date;
         this.winPts = winPts;
         this.lossPts = lossPts;
         this.homeTeamWon = homeTeamWon;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public long getId() {
