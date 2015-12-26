@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="morphia-1.0.1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../Libraries/morphia-1.0.1.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
