@@ -82,7 +82,7 @@ public class Team {
     public boolean equals(Object o){
         if (o != null && o instanceof Team){
             Team t = (Team) o;
-            return MiscUtils.cleanString(t.getName()).equalsIgnoreCase(MiscUtils.cleanString(name));
+            return MiscUtils.cleanString(t.getName()).equalsIgnoreCase(MiscUtils.cleanString(name));  // If two teams share the same name, they are equal to eachother. 
         }
         else {
             return false;

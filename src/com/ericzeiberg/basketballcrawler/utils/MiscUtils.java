@@ -9,7 +9,7 @@ import java.util.List;
 public class MiscUtils {
 
 
-    public static Game searchGames(Game g, List<Game> games){
+    public static Game searchGames(Game g, List<Game> games){  // Makes sure that no duplicate games are entered into the db
         for (Game a : games){
             if (g.isSameGame(a)){
                 return a;
@@ -20,7 +20,7 @@ public class MiscUtils {
 
 
     public static String cleanString(String string){
-            return string.replaceAll("\u00a0","").replaceAll("\\(.*\\)", "").replaceAll(" ", "");
+            return string.replaceAll("\u00a0","").replaceAll("\\(.*\\)", "").replaceAll(" ", "");  // This removes extra spaces and weird characters from the strings
     }
 
 
