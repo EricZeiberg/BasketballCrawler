@@ -8,30 +8,6 @@ import java.util.List;
 
 public class MiscUtils {
 
-    public static Team searchTeams(Team t, List<Team> teams){
-        for (Team e : teams){
-            if (t.getName().equalsIgnoreCase(cleanString(e.getName()))){
-                return e;
-            }
-        }
-        return null;
-    }
-
-    public static List<Team> replaceTeam(Team t, List<Team> teams){
-        for (Team e : teams){
-            if (t.getName().equalsIgnoreCase(cleanString(e.getName()))){
-                teams.set(teams.indexOf(e), t);
-                return teams;
-            }
-        }
-        try {
-            throw new Exception("Can't replace team!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-        return null;
-    }
 
     public static Game searchGames(Game g, List<Game> games){
         for (Game a : games){

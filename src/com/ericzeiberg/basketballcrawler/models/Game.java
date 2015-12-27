@@ -1,5 +1,6 @@
 package com.ericzeiberg.basketballcrawler.models;
 
+import com.ericzeiberg.basketballcrawler.utils.MiscUtils;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
@@ -66,7 +67,7 @@ public class Game {
     }
 
     public boolean isSameGame(Game g){
-        if (g.getLocation().equalsIgnoreCase(location) && g.getDate().equalsIgnoreCase(date)){
+        if (MiscUtils.cleanString(g.getLocation()).equalsIgnoreCase(MiscUtils.cleanString(location)) && MiscUtils.cleanString(g.getDate()).equalsIgnoreCase(MiscUtils.cleanString(date))){
             return true;
         }
         else {
