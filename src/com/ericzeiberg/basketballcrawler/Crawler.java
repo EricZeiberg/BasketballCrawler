@@ -4,12 +4,14 @@ import com.ericzeiberg.basketballcrawler.models.Game;
 import com.ericzeiberg.basketballcrawler.models.Team;
 import com.ericzeiberg.basketballcrawler.utils.MiscUtils;
 import com.sun.tools.hat.internal.util.Misc;
+import org.bson.types.ObjectId;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,25 +33,40 @@ public class Crawler {
                     continue;
                 }
                 Element aTag = e.getElementsByTag("td").first().getElementsByTag("font").first().getElementsByTag("a").first();
-                Team t = new Team(aTag.text());
+                Team t = new Team(new ObjectId(), aTag.text());
                 System.out.println("Adding new team " + t.getName());
                 teams.add(t);
                 parseTeamPage(t, aTag.attr("href"));
                 i++;
             }
 
-            System.out.println();
-            for (Team t1 : teams){
-                System.out.println(t1);
-            }
+//            System.out.println();
+//            for (Team t1 : teams){
+//                System.out.println(t1);
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void parseTeamPage(Team t, String url){
+        int tries = 0;
+        while (true){
+            try {
+                doc = Jsoup.connect(url).userAgent("Mozilla").get();
+                break;
+            }
+            catch (IOException e){
+                if (tries > 5){
+                    break;
+                }
+                System.out.println("IOException. Trying again!");
+                tries++;
+
+            }
+        }
+
         try {
-            doc = Jsoup.connect(url).userAgent("Mozilla").get();
             Element gamesTable = doc.getElementsByTag("table").first();
             Elements gameRows = gamesTable.getElementsByTag("tr");
             int i = 0;
@@ -62,13 +79,13 @@ public class Crawler {
                     continue;
                 }
                 String date = e.getElementsByTag("td").first().text();
-                Team newTeam = new Team(e.getElementsByTag("td").get(1).text());
+                Team newTeam = new Team(new ObjectId(), e.getElementsByTag("td").get(1).text());
 
                 if (MiscUtils.searchTeams(newTeam, teams) != null){
                     newTeam = MiscUtils.searchTeams(newTeam, teams);
                 }
                 String points = e.getElementsByTag("td").get(3).text();
-                if (points.contains("p.m.") || points.contains("a.m. ") || points.contains("TBA")){
+                if (points.contains("p.m.") || points.contains("a.m.") || points.contains("TBA")){
                     continue;
                 }
                 String location;
@@ -82,7 +99,7 @@ public class Crawler {
                 if (e.getElementsByTag("td").get(2).text().split("-")[0].contains("Home")){
                     if (points.split(" ")[0].contains("W")){
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
+                        g = new Game(new ObjectId(), t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         }
@@ -94,7 +111,7 @@ public class Crawler {
                     }
                     else {
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
+                        g = new Game(new ObjectId(), t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
@@ -107,7 +124,7 @@ public class Crawler {
                 else {
                     if (points.split(" ")[0].contains("W")){
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
+                        g = new Game(new ObjectId(), newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
@@ -118,7 +135,7 @@ public class Crawler {
                     }
                     else {
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
+                        g = new Game(new ObjectId(), newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
@@ -128,7 +145,7 @@ public class Crawler {
                         newTeam.setWins(newTeam.getWins() + 1);
                     }
                 }
-                System.out.println(g);
+               // System.out.println(g);
                 if (MiscUtils.searchTeams(newTeam, teams) != null){
                     MiscUtils.replaceTeam(newTeam, teams);
                 }
@@ -138,7 +155,7 @@ public class Crawler {
                 }
                 i++;
             }
-        } catch (IOException | ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
 

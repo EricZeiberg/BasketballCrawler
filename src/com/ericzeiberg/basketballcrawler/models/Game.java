@@ -1,5 +1,6 @@
 package com.ericzeiberg.basketballcrawler.models;
 
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
@@ -9,7 +10,7 @@ import org.mongodb.morphia.annotations.Reference;
 public class Game {
 
     @Id
-    private long id;
+    private ObjectId id;
 
     @Reference
     private Team homeTeam;
@@ -23,7 +24,8 @@ public class Game {
     private int lossPts;
     private boolean homeTeamWon;
 
-    public Game(Team homeTeam, Team awayTeam, String location, String date, int winPts, int lossPts, boolean homeTeamWon) {
+    public Game(ObjectId id, Team homeTeam, Team awayTeam, String location, String date, int winPts, int lossPts, boolean homeTeamWon) {
+        this.id = id;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.location = location;
@@ -37,7 +39,7 @@ public class Game {
         return date;
     }
 
-    public long getId() {
+    public ObjectId getId() {
         return id;
     }
 
