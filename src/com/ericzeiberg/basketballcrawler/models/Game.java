@@ -12,11 +12,9 @@ public class Game {
     @Id
     private ObjectId id;
 
-    @Reference
-    private Team homeTeam;
+    private String homeTeam;
 
-    @Reference
-    private Team awayTeam;
+    private String awayTeam;
 
     private String location;
     private String date;
@@ -24,7 +22,7 @@ public class Game {
     private int lossPts;
     private boolean homeTeamWon;
 
-    public Game(ObjectId id, Team homeTeam, Team awayTeam, String location, String date, int winPts, int lossPts, boolean homeTeamWon) {
+    public Game(ObjectId id, String homeTeam, String awayTeam, String location, String date, int winPts, int lossPts, boolean homeTeamWon) {
         this.id = id;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
@@ -43,11 +41,11 @@ public class Game {
         return id;
     }
 
-    public Team getHomeTeam() {
+    public String getHomeTeam() {
         return homeTeam;
     }
 
-    public Team getAwayTeam() {
+    public String getAwayTeam() {
         return awayTeam;
     }
 

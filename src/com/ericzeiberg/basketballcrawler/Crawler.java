@@ -79,11 +79,8 @@ public class Crawler {
                     continue;
                 }
                 String date = e.getElementsByTag("td").first().text();
-                Team newTeam = new Team(new ObjectId(), e.getElementsByTag("td").get(1).text());
+                String otherTeam = MiscUtils.cleanString(e.getElementsByTag("td").get(1).text());
 
-                if (MiscUtils.searchTeams(newTeam, teams) != null){
-                    newTeam = MiscUtils.searchTeams(newTeam, teams);
-                }
                 String points = e.getElementsByTag("td").get(3).text();
                 if (points.contains("p.m.") || points.contains("a.m.") || points.contains("TBA")){
                     continue;
@@ -99,7 +96,7 @@ public class Crawler {
                 if (e.getElementsByTag("td").get(2).text().split("-")[0].contains("Home")){
                     if (points.split(" ")[0].contains("W")){
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(new ObjectId(), t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
+                        g = new Game(new ObjectId(), t.getName(), otherTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         }
@@ -107,51 +104,39 @@ public class Crawler {
                             continue;
                         }
                         t.setWins(t.getWins() + 1);
-                        newTeam.setLosses(newTeam.getLosses() + 1);
                     }
                     else {
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(new ObjectId(), t, newTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
+                        g = new Game(new ObjectId(), t.getName(), otherTeam, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
                             continue;
                         }
                         t.setLosses(t.getLosses() + 1);
-                        newTeam.setWins(newTeam.getWins() + 1);
                     }
                 }
                 else {
                     if (points.split(" ")[0].contains("W")){
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(new ObjectId(), newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
+                        g = new Game(new ObjectId(), otherTeam, t.getName(), location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), false);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
                             continue;
                         }
                         t.setWins(t.getWins() + 1);
-                        newTeam.setLosses(newTeam.getLosses() + 1);
                     }
                     else {
                         String[] pointArray = MiscUtils.cleanString(points.split(" ")[1].split("-"));
-                        g = new Game(new ObjectId(), newTeam, t, location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
+                        g = new Game(new ObjectId(), otherTeam, t.getName(), location, date, Integer.parseInt(pointArray[0]), Integer.parseInt(pointArray[1]), true);
                         if (MiscUtils.searchGames(g, games) == null){
                             games.add(g);
                         } else{
                             continue;
                         }
                         t.setLosses(t.getLosses() + 1);
-                        newTeam.setWins(newTeam.getWins() + 1);
                     }
-                }
-               // System.out.println(g);
-                if (MiscUtils.searchTeams(newTeam, teams) != null){
-                    MiscUtils.replaceTeam(newTeam, teams);
-                }
-
-                if (MiscUtils.searchTeams(newTeam, teams) == null){
-                    teams.add(newTeam);
                 }
                 i++;
             }

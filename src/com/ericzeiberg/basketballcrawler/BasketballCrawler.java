@@ -6,6 +6,7 @@ import com.mongodb.MongoClient;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
+import org.mongodb.morphia.query.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class BasketballCrawler {
 
         morphia.mapPackage("com.ericzeiberg.basketballcrawler");
 
-        final Datastore datastore = morphia.createDatastore(new MongoClient("localhost" , 27017 ), "BasketballCrawler1");
+        final Datastore datastore = morphia.createDatastore(new MongoClient("localhost" , 27017 ), "BBC_RAW");
         datastore.ensureIndexes();
 
         Crawler.parseDivisionPage(Division.LL);
@@ -29,31 +30,36 @@ public class BasketballCrawler {
         List<Team> teams = Crawler.teams;
         List<Game> games = Crawler.games;
 
-
-        List<Team> teamsToRemove = new ArrayList<>();
-        for (Team t : teams){
-            if (t.getWins() == 0 && t.getLosses() == 0 && t.getTies() == 0){
-                teamsToRemove.add(t);
-            }
-        }
-
-        teams.removeAll(teamsToRemove);
-        teamsToRemove.clear();
-
-        for (int i = 0; i < teams.size(); i++){
-            for (int i1 = i+1; i1 < teams.size(); i1++){
-                if (teams.get(i).equals(teams.get(i1))){
-                    teams.get(i).setWins(teams.get(i).getWins() + teams.get(i1).getWins());
-                    teams.get(i).setLosses(teams.get(i).getLosses() + teams.get(i1).getLosses());
-                    teamsToRemove.add(teams.get(i1));
-                }
-            }
-        }
-
-        teams.removeAll(teamsToRemove);
-
         datastore.save(teams);
         datastore.save(games);
+
+//        final Query<Team> query = datastore.createQuery(Team.class);
+//        final List<Team> rawTeams = query.asList();
+
+//        List<Team> teamsToRemove = new ArrayList<>();
+//        for (Team t : teams){
+//            if (t.getWins() == 0 && t.getLosses() == 0 && t.getTies() == 0){
+//                teamsToRemove.add(t);
+//            }
+//        }
+//
+//        teams.removeAll(teamsToRemove);
+//        teamsToRemove = new ArrayList<>();
+//
+//        for (int i = 0; i < teams.size(); i++){
+//            for (int i1 = i+1; i1 < teams.size(); i1++){
+//                if (teams.get(i).equals(teams.get(i1))){
+//                    teams.get(i).setWins(teams.get(i).getWins() + teams.get(i1).getWins());
+//                    teams.get(i).setLosses(teams.get(i).getLosses() + teams.get(i1).getLosses());
+//                    System.out.println("Removing " + teams.get(i1) + " and merging with " + teams.get(i));
+//                    teamsToRemove.add(teams.get(i1));
+//                }
+//            }
+//        }
+//
+//        teams.removeAll(teamsToRemove);
+
+
 
 
 

@@ -17,11 +17,11 @@ public class MiscUtils {
         return null;
     }
 
-    public static void replaceTeam(Team t, List<Team> teams){
+    public static List<Team> replaceTeam(Team t, List<Team> teams){
         for (Team e : teams){
-            if (t.getName().equalsIgnoreCase(e.getName())){
+            if (t.getName().equalsIgnoreCase(cleanString(e.getName()))){
                 teams.set(teams.indexOf(e), t);
-                return;
+                return teams;
             }
         }
         try {
@@ -30,6 +30,7 @@ public class MiscUtils {
             e.printStackTrace();
             System.exit(0);
         }
+        return null;
     }
 
     public static Game searchGames(Game g, List<Game> games){
